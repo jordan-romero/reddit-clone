@@ -1,5 +1,7 @@
+import Posts from './containers/Posts';
+
 function App() {
-  return <div>Hello World!</div>;
+  return <Posts />;
 }
 
 export default App;
