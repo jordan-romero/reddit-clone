@@ -1,11 +1,32 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react';
+import Post from '../components/Post';
+import db from '../lib/firebase';
 
 const Posts = () => {
-    return (
-        <div>
-            Hi from posts
-        </div>
-    )
-}
+  const [posts, setPosts] = useState([]);
 
-export default Posts
+  useEffect(() => {
+    db.collection('posts')
+      .orderBy('createdAt', 'desc')
+      .get()
+      .then((querySnapshot) => {
+        const data = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+
+        setPosts(data);
+      });
+  }, []);
+
+  console.log(posts);
+  return (
+    <div>
+      {posts.map((post) => (
+        <Post post={post} key={post.id} />
+      ))}
+    </div>
+  );
+};
+
+export default Posts;
